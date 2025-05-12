@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Copy to Clipboard</title>
+<style>
+  #copyButton {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  #copyButton img {
+    vertical-align: middle; 
+  }
+
+  #copyButton.copied img {
+    content: url('check_icon.png'); /* Path to your checkmark image */
+    width: 16px; /* Or a desired width for the checkmark */
+    height: 13px;
+  }
+
+</style>
+</head>
+<body>
+
+<textarea id="textToCopy" style="position: absolute; left: -9999px;"></textarea>
+<button id="copyButton" title="Copy the answer" onclick="copyToClipboard()">
+  <img src="copy_icon1.png" alt="Copy">
+</button>
+
+<script>
+    function getQueryParam(name) {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        return urlSearchParams.get(name);
+    }
+
+    const textToCopy = document.getElementById("textToCopy");
+    const copyText = getQueryParam("copy");
+    if (copyText) {
+        textToCopy.value = decodeURIComponent(copyText);
+    }
+
+    const copyButton = document.getElementById("copyButton");
+    copyButton.title = textToCopy.value;
+
+    function copyToClipboard() {
+        textToCopy.select();
+        document.execCommand("copy");
+
+        const clipboardContents = textToCopy.value;
+
+        // Change the class to update the image
+        copyButton.classList.add("copied");
+
+        setTimeout(function () {
+            copyButton.classList.remove("copied");
+            copyButton.title = textToCopy.value;
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
